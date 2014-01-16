@@ -1,7 +1,7 @@
 package com.example.viewtemplate.xml;
 
 import com.example.viewtemplate.L;
-import com.example.viewtemplate.TwowayMap;
+import com.example.viewtemplate.DuplexMap;
 import com.example.viewtemplate.Utils;
 import com.example.viewtemplate.classscanner.Scanned;
 import com.example.viewtemplate.classscanner.ScannerListener;
@@ -13,8 +13,8 @@ import java.util.ArrayList;
 @Scanned
 public class NodeScanner extends ScannerListener {
 
-    public static final TwowayMap<String, ArrayList<Class>> TAG_NODE_MAP = new TwowayMap<String, ArrayList<Class>>();
-    public static final TwowayMap<String, Class> LOCAL_NODE_MAP = new TwowayMap<String, Class>(){
+    public static final DuplexMap<String, ArrayList<Class>> TAG_NODE_MAP = new DuplexMap<String, ArrayList<Class>>();
+    public static final DuplexMap<String, Class> LOCAL_NODE_MAP = new DuplexMap<String, Class>(){
         {
             putNode(Item.class);
             putNode(LogConfig.class);
