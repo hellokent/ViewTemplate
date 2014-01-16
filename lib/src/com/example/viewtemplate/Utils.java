@@ -22,7 +22,6 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 工具类
@@ -154,11 +153,11 @@ public final class Utils {
 			assert !TextUtils.isEmpty(str);
 
 			final Class type = f.getType();
-			IParsable iParsable = PARSE_MAP.get(type);
+			IParseObj iParseObj = PARSE_MAP.get(type);
 			final Object dstObj;
-			if (iParsable != null){
+			if (iParseObj != null){
 				try {
-					dstObj = iParsable.parse(str);
+					dstObj = iParseObj.parse(str);
 				} catch (Throwable throwable){
 					throwable.printStackTrace();
 					return null;
@@ -174,27 +173,27 @@ public final class Utils {
 		}
 
 
-		private static interface IParsable{
+		private static interface IParseObj {
 			Object parse(String src);
 		}
 
-		static final HashMap<Class, IParsable> PARSE_MAP = new HashMap<Class, IParsable>(){
+		static final HashMap<Class, IParseObj> PARSE_MAP = new HashMap<Class, IParseObj>(){
 			{
-				put(Byte.class, new ByteParsable());
-				put(byte.class, new ByteParsable());
-				put(Short.class, new ShortParsable());
-				put(short.class, new ShortParsable());
-				put(Integer.class, new IntegerParsable());
-				put(int.class, new IntegerParsable());
-				put(Float.class, new FloatParsable());
-				put(float.class, new FloatParsable());
-				put(Double.class, new DoubleParsable());
-				put(double.class, new DoubleParsable());
-				put(String.class, new StringParsable());
+				put(Byte.class, new ParseByte());
+				put(byte.class, new ParseByte());
+				put(Short.class, new ParseShort());
+				put(short.class, new ParseShort());
+				put(Integer.class, new ParaseInteger());
+				put(int.class, new ParaseInteger());
+				put(Float.class, new ParseFloat());
+				put(float.class, new ParseFloat());
+				put(Double.class, new ParseDouble());
+				put(double.class, new ParseDouble());
+				put(String.class, new ParseString());
 			}
 		};
 
-		private static class StringParsable implements IParsable{
+		private static class ParseString implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -202,7 +201,7 @@ public final class Utils {
 			}
 		}
 
-		private static class DoubleParsable implements IParsable{
+		private static class ParseDouble implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -210,7 +209,7 @@ public final class Utils {
 			}
 		}
 
-		private static class FloatParsable implements IParsable{
+		private static class ParseFloat implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -218,7 +217,7 @@ public final class Utils {
 			}
 		}
 
-		private static class IntegerParsable implements IParsable{
+		private static class ParaseInteger implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -226,7 +225,7 @@ public final class Utils {
 			}
 		}
 
-		private static class ShortParsable implements IParsable{
+		private static class ParseShort implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -234,7 +233,7 @@ public final class Utils {
 			}
 		}
 
-		private static class ByteParsable implements IParsable{
+		private static class ParseByte implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -246,35 +245,6 @@ public final class Utils {
 	}
 
 	public static final class Text {
-		public static final HashMap<String, String> ESCAPE_MAP = new HashMap<String, String>(){
-			{
-				put("<", "&lt;");
-				put(">", "&gt;");
-				put("&", "&amp;");
-				put("'", "&apos;");
-				put("\"", "&quot;");
-				put("®", "&reg;");
-				put("©", "&copy;");
-				put("™", "&trade;");
-			}
-		};
-
-		/**
-		 * XML编码
-		 */
-		public static String escape(String src){
-			for (Map.Entry<String, String> entry : ESCAPE_MAP.entrySet()){
-				src = src.replaceAll(entry.getKey(), entry.getValue());
-			}
-			return src;
-		}
-
-		public static String unescape(String src){
-			for (Map.Entry<String, String> entry : ESCAPE_MAP.entrySet()){
-				src = src.replaceAll(entry.getValue(), entry.getKey());
-			}
-			return src;
-		}
 
 		public static String multiText(final CharSequence chars, final int count){
 			StringBuilder result = new StringBuilder();
