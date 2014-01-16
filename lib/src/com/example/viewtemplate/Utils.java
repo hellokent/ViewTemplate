@@ -163,7 +163,7 @@ public final class Utils {
 					return null;
 				}
 			} else if (isSubclassOf(type, Enum.class)){
-				dstObj = Enum.valueOf((Class<? extends Enum>) type, str);
+                dstObj = Enum.valueOf(type, str);
 			} else {
 				dstObj = f.get(obj);
 			}
@@ -183,8 +183,8 @@ public final class Utils {
 				put(byte.class, new ParseByte());
 				put(Short.class, new ParseShort());
 				put(short.class, new ParseShort());
-				put(Integer.class, new ParaseInteger());
-				put(int.class, new ParaseInteger());
+				put(Integer.class, new ParseInteger());
+				put(int.class, new ParseInteger());
 				put(Float.class, new ParseFloat());
 				put(float.class, new ParseFloat());
 				put(Double.class, new ParseDouble());
@@ -217,7 +217,7 @@ public final class Utils {
 			}
 		}
 
-		private static class ParaseInteger implements IParseObj {
+		private static class ParseInteger implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -266,7 +266,7 @@ public final class Utils {
 
         public static String readStream2String(final InputStream is) throws IOException {
             final BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String str = null;
+            String str;
             StringBuilder result = new StringBuilder();
             while ((str = br.readLine())!= null){
                 result.append(str).append('\n');
@@ -290,7 +290,7 @@ public final class Utils {
 
 
         public static <T extends XmlNode> T parseStream(final InputStream stream, final Class<T> nodeClass, IParseCallback parseCallback){
-            final XmlParser<T> parser = new XmlParser<T>(nodeClass, null);
+            final XmlParser<T> parser = new XmlParser<T>(nodeClass, parseCallback);
             try {
                 SAX_PARSER_FACTORY.newSAXParser().parse(stream, parser);
                 return parser.getRootNode();
@@ -317,8 +317,9 @@ public final class Utils {
 
         public static String getMetaString(String name) {
             try {
-                final ApplicationInfo ai = sApp.getPackageManager().getApplicationInfo(sApp.getPackageName(),
-                        PackageManager.GET_META_DATA);
+                final ApplicationInfo ai = sApp
+                        .getPackageManager()
+                        .getApplicationInfo(sApp.getPackageName(),PackageManager.GET_META_DATA);
                 if (ai == null || ai.metaData == null){
                     return null;
                 }
