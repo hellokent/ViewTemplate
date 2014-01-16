@@ -16,13 +16,9 @@ import com.example.viewtemplate.xml.XmlParser;
 
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 工具类
@@ -102,7 +98,30 @@ public final class Utils {
                 argumentClasses[i] = arg[i].getClass();
             }
 
-            return clazz.getDeclaredConstructor(argumentClasses).newInstance(arg);
+            Constructor constructor = null;
+
+            for (Constructor c : clazz.getDeclaredConstructors()){
+                Class[] paraTypes = c.getParameterTypes();
+                if (paraTypes.length != argumentClasses.length){
+                    continue;
+                }
+                boolean ok = true;
+                for (int i = 0; i < paraTypes.length; ++i){
+                    if (!isSubclassOf(argumentClasses[i], paraTypes[i])){
+                        ok = false;
+                    }
+                }
+                if (ok){
+                    constructor = c;
+                    break;
+                }
+            }
+
+            if (constructor == null){
+                return null;
+            }
+
+            return (T) constructor.newInstance(arg);
         }
 
         public static Class getCollectionType(final Field field){
@@ -154,17 +173,17 @@ public final class Utils {
 			assert !TextUtils.isEmpty(str);
 
 			final Class type = f.getType();
-			IParsable iParsable = PARSE_MAP.get(type);
+			IParseObj iParseObj = PARSE_MAP.get(type);
 			final Object dstObj;
-			if (iParsable != null){
+			if (iParseObj != null){
 				try {
-					dstObj = iParsable.parse(str);
+					dstObj = iParseObj.parse(str);
 				} catch (Throwable throwable){
 					throwable.printStackTrace();
 					return null;
 				}
 			} else if (isSubclassOf(type, Enum.class)){
-				dstObj = Enum.valueOf((Class<? extends Enum>) type, str);
+                dstObj = Enum.valueOf(type, str);
 			} else {
 				dstObj = f.get(obj);
 			}
@@ -174,27 +193,27 @@ public final class Utils {
 		}
 
 
-		private static interface IParsable{
+		private static interface IParseObj {
 			Object parse(String src);
 		}
 
-		static final HashMap<Class, IParsable> PARSE_MAP = new HashMap<Class, IParsable>(){
+		static final HashMap<Class, IParseObj> PARSE_MAP = new HashMap<Class, IParseObj>(){
 			{
-				put(Byte.class, new ByteParsable());
-				put(byte.class, new ByteParsable());
-				put(Short.class, new ShortParsable());
-				put(short.class, new ShortParsable());
-				put(Integer.class, new IntegerParsable());
-				put(int.class, new IntegerParsable());
-				put(Float.class, new FloatParsable());
-				put(float.class, new FloatParsable());
-				put(Double.class, new DoubleParsable());
-				put(double.class, new DoubleParsable());
-				put(String.class, new StringParsable());
+				put(Byte.class, new ParseByte());
+				put(byte.class, new ParseByte());
+				put(Short.class, new ParseShort());
+				put(short.class, new ParseShort());
+				put(Integer.class, new ParseInteger());
+				put(int.class, new ParseInteger());
+				put(Float.class, new ParseFloat());
+				put(float.class, new ParseFloat());
+				put(Double.class, new ParseDouble());
+				put(double.class, new ParseDouble());
+				put(String.class, new ParseString());
 			}
 		};
 
-		private static class StringParsable implements IParsable{
+		private static class ParseString implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -202,7 +221,7 @@ public final class Utils {
 			}
 		}
 
-		private static class DoubleParsable implements IParsable{
+		private static class ParseDouble implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -210,7 +229,7 @@ public final class Utils {
 			}
 		}
 
-		private static class FloatParsable implements IParsable{
+		private static class ParseFloat implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -218,7 +237,7 @@ public final class Utils {
 			}
 		}
 
-		private static class IntegerParsable implements IParsable{
+		private static class ParseInteger implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -226,7 +245,7 @@ public final class Utils {
 			}
 		}
 
-		private static class ShortParsable implements IParsable{
+		private static class ParseShort implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -234,7 +253,7 @@ public final class Utils {
 			}
 		}
 
-		private static class ByteParsable implements IParsable{
+		private static class ParseByte implements IParseObj {
 
 			@Override
 			public Object parse(String src) {
@@ -246,35 +265,6 @@ public final class Utils {
 	}
 
 	public static final class Text {
-		public static final HashMap<String, String> ESCAPE_MAP = new HashMap<String, String>(){
-			{
-				put("<", "&lt;");
-				put(">", "&gt;");
-				put("&", "&amp;");
-				put("'", "&apos;");
-				put("\"", "&quot;");
-				put("®", "&reg;");
-				put("©", "&copy;");
-				put("™", "&trade;");
-			}
-		};
-
-		/**
-		 * XML编码
-		 */
-		public static String escape(String src){
-			for (Map.Entry<String, String> entry : ESCAPE_MAP.entrySet()){
-				src = src.replaceAll(entry.getKey(), entry.getValue());
-			}
-			return src;
-		}
-
-		public static String unescape(String src){
-			for (Map.Entry<String, String> entry : ESCAPE_MAP.entrySet()){
-				src = src.replaceAll(entry.getValue(), entry.getKey());
-			}
-			return src;
-		}
 
 		public static String multiText(final CharSequence chars, final int count){
 			StringBuilder result = new StringBuilder();
@@ -296,7 +286,7 @@ public final class Utils {
 
         public static String readStream2String(final InputStream is) throws IOException {
             final BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String str = null;
+            String str;
             StringBuilder result = new StringBuilder();
             while ((str = br.readLine())!= null){
                 result.append(str).append('\n');
@@ -320,7 +310,7 @@ public final class Utils {
 
 
         public static <T extends XmlNode> T parseStream(final InputStream stream, final Class<T> nodeClass, IParseCallback parseCallback){
-            final XmlParser<T> parser = new XmlParser<T>(nodeClass, null);
+            final XmlParser<T> parser = new XmlParser<T>(nodeClass, parseCallback);
             try {
                 SAX_PARSER_FACTORY.newSAXParser().parse(stream, parser);
                 return parser.getRootNode();
@@ -347,8 +337,9 @@ public final class Utils {
 
         public static String getMetaString(String name) {
             try {
-                final ApplicationInfo ai = sApp.getPackageManager().getApplicationInfo(sApp.getPackageName(),
-                        PackageManager.GET_META_DATA);
+                final ApplicationInfo ai = sApp
+                        .getPackageManager()
+                        .getApplicationInfo(sApp.getPackageName(),PackageManager.GET_META_DATA);
                 if (ai == null || ai.metaData == null){
                     return null;
                 }

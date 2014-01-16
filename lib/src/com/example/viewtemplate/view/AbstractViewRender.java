@@ -32,7 +32,7 @@ public abstract class AbstractViewRender<T extends BaseViewNode>{
         if (view instanceof ViewGroup){
             final ViewGroup vg = (ViewGroup) view;
             vg.removeAllViewsInLayout();
-            for (XmlNode childNode : node.getChilds()){
+            for (XmlNode childNode : node.getChildren()){
                 if (childNode instanceof BaseViewNode){
                     Class<? extends AbstractViewRender> c = ViewFactory.getComponent((BaseViewNode) childNode);
                     if (c == null){

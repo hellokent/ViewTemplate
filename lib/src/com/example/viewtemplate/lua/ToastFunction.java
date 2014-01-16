@@ -18,7 +18,6 @@ public class ToastFunction extends JavaFunction{
 
     @Override
     public int execute() throws LuaException {
-
         Toast.makeText(Utils.getApp(), getParam(-1).getString(), Toast.LENGTH_SHORT).show();
         return 0;
     }

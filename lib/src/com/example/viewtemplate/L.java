@@ -151,7 +151,7 @@ public final class L {
 
         @Override
         public String toString() {
-            return "LogInfomation{" +
+            return "LogConfigure{" +
                     "packageName='" + mPackageName + '\'' +
                     ", enable=" + mEnable +
                     ", maxLevel=" + mMaxLevel +

@@ -66,7 +66,7 @@ public abstract class JavaFunction {
      * @return Reference to parameter.
      * @see LuaObject
      */
-    public LuaObject getParam(int idx) {
+    public final LuaObject getParam(int idx) {
         return L.getLuaObject(idx);
     }
 
@@ -76,7 +76,7 @@ public abstract class JavaFunction {
      *
      * @param name name of the function.
      */
-    public void register(String name) throws LuaException {
+    public final void register(String name) throws LuaException {
         synchronized (L) {
             L.pushJavaFunction(this);
             L.setGlobal(name);

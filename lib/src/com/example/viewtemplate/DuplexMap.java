@@ -3,9 +3,10 @@ package com.example.viewtemplate;
 import java.util.HashMap;
 
 /**
+ * 双向map
  * Created by chenyang.coder@gmail.com on 14-1-14 上午10:47.
  */
-public class TwowayMap<K, V> {
+public class DuplexMap<K, V> {
     HashMap<K, V> kKeyMap = new HashMap<K, V>();
     HashMap<V, K> kValueMap = new HashMap<V, K>();
 
