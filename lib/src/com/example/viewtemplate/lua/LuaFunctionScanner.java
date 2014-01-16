@@ -1,5 +1,6 @@
 package com.example.viewtemplate.lua;
 
+import android.text.TextUtils;
 import com.example.viewtemplate.Utils;
 import com.example.viewtemplate.classscanner.Scanned;
 import com.example.viewtemplate.classscanner.ScannerListener;
@@ -18,17 +19,32 @@ public class LuaFunctionScanner extends ScannerListener {
             return;
         }
 
-        final LuaFunctionName nameAnnotation = clazz.getAnnotation(LuaFunctionName.class);
+        if (Utils.Reflect.isSubclassOf(clazz, BaseFunction.class)){
+            try {
+                final BaseFunction baseFunction = (BaseFunction) Utils.Reflect.newInstance(clazz, Utils.getApp());
+                final String name = baseFunction.getFunctionName();
+                if (TextUtils.isEmpty(name)){
+                    return;
+                }
+                baseFunction.register(name);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
 
-        if (nameAnnotation == null){
-            return;
-        }
+            final LuaFunctionName nameAnnotation = clazz.getAnnotation(LuaFunctionName.class);
 
-        try {
-            JavaFunction function = Utils.Reflect.newInstance((Class<JavaFunction>)clazz, LuaUtils.L);
-            function.register(nameAnnotation.value());
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (nameAnnotation == null){
+                return;
+            }
+
+            try {
+                JavaFunction function = Utils.Reflect.newInstance((Class<JavaFunction>)clazz, LuaUtils.L);
+                function.register(nameAnnotation.value());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

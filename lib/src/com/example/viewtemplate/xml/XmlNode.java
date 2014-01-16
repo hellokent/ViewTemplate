@@ -69,7 +69,7 @@ public class XmlNode implements Cloneable{
 	private String mValue;
 	private XmlNode mParentNode;
 	private String mComment;
-    private ArrayList<XmlNode> mChilds = new ArrayList<XmlNode>();
+    private ArrayList<XmlNode> mChildren = new ArrayList<XmlNode>();
 
     public XmlNode(){
         init(getClass().getAnnotation(Xml.class).value());
@@ -111,7 +111,7 @@ public class XmlNode implements Cloneable{
     private void setParentNode(final XmlNode parentNode){
         assert parentNode != null;
         mParentNode = parentNode;
-        parentNode.mChilds.add(this);
+        parentNode.mChildren.add(this);
     }
 
 	public final String getComment() {
@@ -230,7 +230,7 @@ public class XmlNode implements Cloneable{
 		XmlNode result = XMLNODE_CACHE.get(nodeClass);
 		if (result != null){
 			result = result.clone();
-            result.mChilds.clear();
+            result.mChildren.clear();
 			++sCloneCount;
 		}else {
 			try {
@@ -273,7 +273,6 @@ public class XmlNode implements Cloneable{
             final Class type = entry.getValue().getType();
             try {
                 if (entry.getValue().get(this) == null
-                        || type == XmlNode.class
                         || isSubclassOf(type, XmlNode.class)
                         || isSubclassOf(type, Collection.class)){
                     continue;
@@ -388,8 +387,8 @@ public class XmlNode implements Cloneable{
 	protected void onFinishMapAttr(){
 	}
 
-    public ArrayList<XmlNode> getChilds() {
-        return mChilds;
+    public ArrayList<XmlNode> getChildren() {
+        return mChildren;
     }
 
 }

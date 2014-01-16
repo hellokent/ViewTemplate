@@ -16,10 +16,7 @@ import com.example.viewtemplate.xml.XmlParser;
 
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -101,7 +98,30 @@ public final class Utils {
                 argumentClasses[i] = arg[i].getClass();
             }
 
-            return clazz.getDeclaredConstructor(argumentClasses).newInstance(arg);
+            Constructor constructor = null;
+
+            for (Constructor c : clazz.getDeclaredConstructors()){
+                Class[] paraTypes = c.getParameterTypes();
+                if (paraTypes.length != argumentClasses.length){
+                    continue;
+                }
+                boolean ok = true;
+                for (int i = 0; i < paraTypes.length; ++i){
+                    if (!isSubclassOf(argumentClasses[i], paraTypes[i])){
+                        ok = false;
+                    }
+                }
+                if (ok){
+                    constructor = c;
+                    break;
+                }
+            }
+
+            if (constructor == null){
+                return null;
+            }
+
+            return (T) constructor.newInstance(arg);
         }
 
         public static Class getCollectionType(final Field field){
