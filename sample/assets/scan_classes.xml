@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scanners>
+    <!-- Lua函数 -->
+    <scanner processor="com.example.viewtemplate.lua.LuaFunctionScanner">
+        <package>com.example.viewtemplate.lua</package>
+        <package>com.example.ViewTemplateDemo</package>
+    </scanner>
+
+    <!-- View渲染器 -->
+    <scanner processor="com.example.viewtemplate.view.RenderScanner">
+        <package>com.example.viewtemplate.view.template</package>
+    </scanner>
+
+    <!-- XML节点 -->
+    <scanner processor="com.example.viewtemplate.xml.NodeScanner">
+        <package>com.example.viewtemplate.xml.nodes</package>
+    </scanner>
+</scanners>

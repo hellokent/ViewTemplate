@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <layout width="200dp" height="wrap" orientation="v" bg="blue" onclick="click_text1()">
+        <text width="100dp"
+              height="50dp"
+              text_color="green"
+              bg="red"
+              onclick="click_text2()">text1</text>
+
+        <text width="50dp"
+              height="20dp"
+              text_color="green"
+              bg="white">text2</text>
+    </layout>
+
+    <lua><![CDATA[
+        function click_text1()
+           toast "click text111111 "
+        end;
+
+        function click_text2()
+            toast "click text222222"
+        end;
+        ]]>
+    </lua>
+</root>

@@ -1,0 +1,13 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <groupId>com.example.ViewTemplateDemo</groupId>
+    <artifactId>parent</artifactId>
+    <packaging>pom</packaging>
+    <name>View Template Demo</name>
+    <modelVersion>4.0.0</modelVersion>
+
+    <dependency>
+        <groupId>com.nostra13.universalimageloader</groupId>
+        <artifactId>universal-image-loader</artifactId>
+        <version>1.9.0</version>
+    </dependency>
+</project>

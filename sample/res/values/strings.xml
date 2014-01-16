@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ViewTemplateDemo</string>
+    <string name="show">Show</string>
+    <string name="goto_lua">Show Lua Demo</string>
+    <string name="goto_view_template">View Template</string>
+</resources>

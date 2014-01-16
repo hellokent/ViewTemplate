@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<log_config>
+    <item package="com.example.viewtemplate.xml">
+        <tag max_level="ERROR" enable="false">xml</tag>
+    </item>
+
+    <item package="com.example.viewtemplate.lua">
+        <tag max_level="ERROR" enable="false">lua</tag>
+    </item>
+
+    <item package="com.example.viewtemplate.view">
+        <tag max_level="ERROR" enable="true">view</tag>
+    </item>
+
+    <item package="com.example.viewtemplate.classscanner">
+        <tag max_level="INFO" enable="false">scanner</tag>
+    </item>
+
+    <item package="com.example.ViewTemplateDemo">
+        <tag max_level="ERROR" enable="true">app</tag>
+    </item>
+
+</log_config>

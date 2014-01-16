@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.example.ViewTemplateDemo"
+          android:versionCode="1"
+          android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="18"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!-- lua脚本程序的需要，//TODO 待确定 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+
+    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
+            android:name=".App">
+
+        <meta-data
+            android:name="log_config"
+            android:value="log_config.xml"/>
+
+        <meta-data
+                android:name="scanner"
+                android:value="scan_classes.xml"/>
+
+        <activity android:name=".ViewTemplateActivity"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+
+        <activity android:name=".MainAcitvity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:label="@string/app_name" android:name="LuaDemoActivity"/>
+    </application>
+</manifest>

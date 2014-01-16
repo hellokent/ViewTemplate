@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <Button android:id="@+id/show_lua_demo"
+            style="@style/main_btn"
+            android:text="@string/goto_lua"
+            android:onClick="showLua"/>
+
+    <Button android:id="@+id/show_view_template"
+            style="@style/main_btn"
+            android:text="@string/goto_view_template"
+            android:onClick="showView"/>
+
+</LinearLayout>
