@@ -12,10 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.viewtemplate.lua.LuaUtils;
 import org.keplerproject.luajava.JavaFunction;
 import org.keplerproject.luajava.LuaException;
 import org.keplerproject.luajava.LuaState;
-import org.keplerproject.luajava.LuaStateFactory;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -66,14 +66,14 @@ public class LuaDemoActivity extends Activity implements OnClickListener, OnLong
 
         handler = new Handler();
 
-        L = LuaStateFactory.newLuaState();
+        L = LuaUtils.L;
         L.openLibs();
 
         try {
             L.pushJavaObject(this);
             L.setGlobal("activity");
 
-            JavaFunction print = new JavaFunction(L) {
+            new JavaFunction(L) {
                 @Override
                 public int execute() throws LuaException {
                     for (int i = 2; i <= L.getTop(); i++) {
@@ -97,8 +97,7 @@ public class LuaDemoActivity extends Activity implements OnClickListener, OnLong
                     output.append("\n");
                     return 0;
                 }
-            };
-            print.register("print");
+            }.register("print");
 
             JavaFunction assetLoader = new JavaFunction(L) {
                 @Override

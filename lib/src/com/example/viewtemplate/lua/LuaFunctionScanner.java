@@ -19,14 +19,14 @@ public class LuaFunctionScanner extends ScannerListener {
             return;
         }
 
-        if (Utils.Reflect.isSubclassOf(clazz, BaseFunction.class)){
+        if (Utils.Reflect.isSubclassOf(clazz, BaseLuaFunction.class)){
             try {
-                final BaseFunction baseFunction = (BaseFunction) Utils.Reflect.newInstance(clazz, Utils.getApp());
-                final String name = baseFunction.getFunctionName();
+                final BaseLuaFunction baseLuaFunction = (BaseLuaFunction) Utils.Reflect.newInstance(clazz, Utils.getApp());
+                final String name = baseLuaFunction.getFunctionName();
                 if (TextUtils.isEmpty(name)){
                     return;
                 }
-                baseFunction.register(name);
+                baseLuaFunction.register(name);
             } catch (Exception e) {
                 e.printStackTrace();
             }

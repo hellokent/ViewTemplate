@@ -10,10 +10,7 @@ import org.keplerproject.luajava.LuaState;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-/**
- * Created by chenyang.coder@gmail.com on 14-1-16 下午4:35.
- */
-public class BaseFunction extends JavaFunction {
+public class BaseLuaFunction extends JavaFunction {
 
     Context mContext;
     Method mMethod;
@@ -22,11 +19,11 @@ public class BaseFunction extends JavaFunction {
 
     static final Object[] EMPTY_ARRAY = {};
 
-    private BaseFunction(final LuaState L) {
+    private BaseLuaFunction(final LuaState L) {
         super(L);
     }
 
-    public BaseFunction(final Application application){
+    public BaseLuaFunction(final Application application){
         this(LuaUtils.L);
         mContext = application;
         for (Method method : getClass().getDeclaredMethods()){

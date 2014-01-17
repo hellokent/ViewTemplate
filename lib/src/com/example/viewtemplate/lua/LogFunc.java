@@ -3,13 +3,10 @@ package com.example.viewtemplate.lua;
 import android.app.Application;
 import com.example.viewtemplate.classscanner.Scanned;
 
-/**
- * Created by chenyang.coder@gmail.com on 14-1-16 下午5:06.
- */
 @Scanned
-public class NewToastFunc extends BaseFunction {
+public class LogFunc extends BaseLuaFunction {
 
-    public NewToastFunc(final Application context) {
+    public LogFunc(final Application context) {
         super(context);
     }
 

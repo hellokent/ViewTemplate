@@ -22,8 +22,9 @@
 
     <lua><![CDATA[
         function click_text1()
-           toast "click text1111111"
-           log("arg1", "arg2");
+            toast "click text1111111"
+            log("arg1", "arg2");
+            
         end;
 
         function click_text2()

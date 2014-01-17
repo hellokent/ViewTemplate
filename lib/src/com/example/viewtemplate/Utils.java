@@ -294,6 +294,20 @@ public final class Utils {
             return result.toString();
         }
 
+        /**
+         * fix String.subString`s memory leak
+         */
+        public String subString(final String str, final int start){
+            return new String(TextUtils.isEmpty(str) ? str : str.substring(start));
+        }
+
+        /**
+         * fix String.subString`s memory leak
+         */
+        public String subString(final String str, final int start, final int end){
+            return new String(TextUtils.isEmpty(str) ? str : str.substring(start, end));
+        }
+
 	}
 
 	public static final class Xml{
